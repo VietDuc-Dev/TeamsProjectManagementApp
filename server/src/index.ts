@@ -10,6 +10,10 @@ import { asyncHandler } from "./middlewares/asyncHandler.middleware";
 import { BadRequestException } from "./utils/appError";
 import { ErrorCodeEnum } from "./enums/error-code.enum";
 
+import "./config/passport.config";
+import passport from "passport";
+import mainRouter from "./routes";
+
 const app = express();
 const BASE_PATH = config.BASE_PATH;
 
@@ -28,6 +32,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(cors({ origin: config.FRONTEND_ORIGIN, credentials: true }));
 
 app.get(
@@ -42,6 +49,8 @@ app.get(
     });
   })
 );
+
+app.use(`${BASE_PATH}`, mainRouter);
 
 app.use(errorHandler);
 
