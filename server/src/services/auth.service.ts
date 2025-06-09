@@ -185,5 +185,4 @@ export const verifyUserService = async ({
   }
 
   return user;
-  // return user.omitPassword();
 };

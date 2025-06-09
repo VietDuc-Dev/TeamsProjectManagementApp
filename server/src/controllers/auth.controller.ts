@@ -69,3 +69,36 @@ export const loginController = asyncHandler(
     )(req, res, next);
   }
 );
+
+export const logOutController = asyncHandler(
+  async (req: Request, res: Response) => {
+    await new Promise<void>((resolve, reject) => {
+      req.logout((err) => {
+        if (err) {
+          console.error("Logout error:", err);
+          return res
+            .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
+            .json({ error: "Failed to log out" });
+        }
+        resolve();
+      });
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      req.session.destroy((err) => {
+        if (err) {
+          console.error("Session destroy error:", err);
+          return res
+            .status(HTTPSTATUS.INTERNAL_SERVER_ERROR)
+            .json({ error: "Could not destroy session" });
+        }
+        res.clearCookie("session");
+        resolve();
+      });
+    });
+
+    return res
+      .status(HTTPSTATUS.OK)
+      .json({ message: "Logged out successfully" });
+  }
+);
