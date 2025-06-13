@@ -9,6 +9,9 @@ import {
   UnauthorizedException,
 } from "../utils/appError";
 
+//********************************
+// GET MEMBER ROLE IN WORKSPACE
+//**************** **************/
 export const getMemberRoleInWorkspace = async (
   userId: string,
   workspaceId: string
@@ -34,6 +37,9 @@ export const getMemberRoleInWorkspace = async (
   return { role: roleName };
 };
 
+//********************************
+// JOIN WORKSPACE BY INVITE
+//**************** **************/
 export const joinWorkspaceByInviteService = async (
   userId: string,
   inviteCode: string

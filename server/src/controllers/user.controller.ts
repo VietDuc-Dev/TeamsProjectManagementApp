@@ -3,6 +3,7 @@ import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { HTTPSTATUS } from "../config/http.config";
 import { getCurrentUserService } from "../services/user.service";
 
+// [GET] GET CURRENT USER
 export const getCurrentUserController = asyncHandler(
   async (req: Request, res: Response) => {
     const userId = req.user?._id;

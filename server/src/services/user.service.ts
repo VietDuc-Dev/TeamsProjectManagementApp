@@ -1,6 +1,9 @@
 import UserModel from "../models/user.model";
 import { BadRequestException } from "../utils/appError";
 
+//********************************
+// GET CURRENT USER
+//**************** **************/
 export const getCurrentUserService = async (userId: string) => {
   const user = await UserModel.findById(userId)
     .populate("currentWorkspace")
