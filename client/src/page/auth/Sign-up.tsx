@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,8 +21,19 @@ import {
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/logo";
 import GoogleOauthButton from "@/components/auth/google-oauth-button";
+import { useMutation } from "@tanstack/react-query";
+import { registerMutationFn } from "@/lib/api";
+import { toast } from "@/hooks/use-toast";
+import { Loader } from "lucide-react";
+import { responseError } from "@/lib/utils";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: registerMutationFn,
+  });
+
   const formSchema = z.object({
     name: z.string().trim().min(1, {
       message: "Name is required",
@@ -45,7 +56,22 @@ const SignUp = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    if (isPending) return;
+
+    mutate(values, {
+      onSuccess() {
+        navigate("/");
+      },
+      onError(error) {
+        console.log(error);
+
+        toast({
+          title: "Error",
+          description: responseError(error),
+          variant: "destructive",
+        });
+      },
+    });
   };
 
   return (
@@ -56,7 +82,6 @@ const SignUp = () => {
           className="flex items-center gap-2 self-center font-medium"
         >
           <Logo />
-          Team Sync.
         </Link>
         <div className="flex flex-col gap-6">
           <Card>
@@ -90,7 +115,7 @@ const SignUp = () => {
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="Joh Doe"
+                                  placeholder="your name"
                                   className="!h-[48px]"
                                   {...field}
                                 />
@@ -112,7 +137,7 @@ const SignUp = () => {
                               </FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder="m@example.com"
+                                  placeholder="your@gmail.com"
                                   className="!h-[48px]"
                                   {...field}
                                 />
@@ -136,6 +161,7 @@ const SignUp = () => {
                                 <Input
                                   type="password"
                                   className="!h-[48px]"
+                                  placeholder="******"
                                   {...field}
                                 />
                               </FormControl>
@@ -145,7 +171,12 @@ const SignUp = () => {
                           )}
                         />
                       </div>
-                      <Button type="submit" className="w-full">
+                      <Button
+                        type="submit"
+                        className="w-full"
+                        disabled={isPending}
+                      >
+                        {isPending && <Loader className="animate-spin" />}
                         Sign up
                       </Button>
                     </div>
