@@ -106,7 +106,7 @@ export const updateTaskService = async (
 //********************************
 // GET ALL TASKS
 //**************** **************/
-export const getAllTaskService = async (
+export const getAllTasksService = async (
   workspaceId: string,
   filters: {
     projectId?: string;
@@ -142,7 +142,7 @@ export const getAllTaskService = async (
   }
 
   if (filters.keyword && filters.keyword !== undefined) {
-    query.title = { $regex: filters.keyword, $option: "i" };
+    query.title = { $regex: filters.keyword, $options: "i" };
   }
 
   if (filters.dueDate) {
@@ -151,11 +151,11 @@ export const getAllTaskService = async (
     };
   }
 
-  // Pagination setup
+  //Pagination Setup
   const { pageSize, pageNumber } = pagination;
   const skip = (pageNumber - 1) * pageSize;
 
-  const [task, totalCount] = await Promise.all([
+  const [tasks, totalCount] = await Promise.all([
     TaskModel.find(query)
       .skip(skip)
       .limit(pageSize)
@@ -168,7 +168,7 @@ export const getAllTaskService = async (
   const totalPages = Math.ceil(totalCount / pageSize);
 
   return {
-    task,
+    tasks,
     pagination: {
       pageSize,
       pageNumber,
