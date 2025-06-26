@@ -26,11 +26,14 @@ import { loginMutationFn } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
 import { Loader } from "lucide-react";
 import { responseError } from "@/lib/utils";
+import { useStore } from "@/store/store";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const returnUrl = searchParams.get("returnUrl");
+
+  const { setAccessToken } = useStore();
 
   const { mutate, isPending } = useMutation({
     mutationFn: loginMutationFn,
@@ -58,9 +61,10 @@ const SignIn = () => {
 
     mutate(values, {
       onSuccess: (data) => {
+        const accessToken = data.access_token;
         const user = data.user;
-        console.log("success:", data);
 
+        setAccessToken(accessToken);
         const decodeUrl = returnUrl ? decodeURIComponent(returnUrl) : null;
         navigate(decodeUrl || `/workspace/${user.currentWorkspace}`);
       },
