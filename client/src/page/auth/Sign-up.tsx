@@ -60,6 +60,11 @@ const SignUp = () => {
 
     mutate(values, {
       onSuccess() {
+        toast({
+          title: "Success",
+          description: "Register successfuly",
+          variant: "success",
+        });
         navigate("/");
       },
       onError(error) {

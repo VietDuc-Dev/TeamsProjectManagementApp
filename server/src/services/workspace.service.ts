@@ -205,9 +205,9 @@ export const deleteWorkspaceService = async (
   session.startTransaction();
 
   try {
-    const workspace = await WorkspaceModel.findById({ workspaceId }).session(
-      session
-    );
+    const workspace = await WorkspaceModel.findById({
+      _id: workspaceId,
+    }).session(session);
     if (!workspace) {
       throw new NotFoundException("Workspace not found");
     }

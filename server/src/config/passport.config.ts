@@ -18,6 +18,7 @@ import {
 import { ProviderEnum } from "../enums/account-provider.enum";
 import { signJwtToken } from "../utils/jwt";
 
+// === Google OAuth2 Strategy ===
 passport.use(
   new GoogleStrategy(
     {
@@ -55,6 +56,7 @@ passport.use(
   )
 );
 
+// === Local Strategy (Email/Password) ===
 passport.use(
   new LocalStrategy(
     {
@@ -73,6 +75,7 @@ passport.use(
   )
 );
 
+// === JWT Strategy ===
 interface JwtPayload {
   userId: string;
 }
