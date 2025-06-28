@@ -41,9 +41,9 @@ This project leverages the latest tools and frameworks for modern development:
 
 ## 🔄 Getting Started
 
-### 1. Watch the Video
+### 1. DEMO
 
-Follow along step-by-step by watching the full guide on YouTube.
+https://teams-project-management-app.vercel.app/
 
 ### 2. Set Up Environment Variables
 
